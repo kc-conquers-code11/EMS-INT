@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Razorpay Tester</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            /* Ensures padding doesn't break width */
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            background: #3399cc;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #287aa3;
+        }
+
+        #response-box {
+            margin-top: 20px;
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 4px;
+            word-wrap: break-word;
+            border: 1px solid #bce8f1;
+            display: none;
+            /* Hidden until success */
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2 style="text-align: center; margin-top: 0;">Razorpay Quick Test</h2>
+
+        <div class="input-group">
+            <label for="key-id">Razorpay Key ID (rzp_test_...)</label>
+            <input type="text" id="key-id" placeholder="Paste your Key ID from .env here">
+        </div>
+
+        <div class="input-group">
+            <label for="order-id">Order ID (from Postman)</label>
+            <input type="text" id="order-id" placeholder="e.g., order_SuuH0Hfv8ycWsw">
+        </div>
+
+        <div class="input-group">
+            <label for="exam-reg-id">Exam Reg ID (Optional - for your payload)</label>
+            <input type="text" id="exam-reg-id" placeholder="e.g., e5bc7d00-...">
+        </div>
+
+        <div id="error-msg" class="error">Please fill in both Key ID and Order ID.</div>
+
+        <button id="rzp-button1">Open Razorpay Checkout</button>
+
+        <pre id="response-box"></pre>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        document.getElementById('rzp-button1').onclick = function (e) {
+            e.preventDefault();
+
+            // 1. Grab values from the input fields dynamically
+            const keyId = document.getElementById('key-id').value.trim();
+            const orderId = document.getElementById('order-id').value.trim();
+            const examRegId = document.getElementById('exam-reg-id').value.trim() || "NOT_PROVIDED";
+            const errorMsg = document.getElementById('error-msg');
+            const responseBox = document.getElementById('response-box');
+
+            // 2. Validate inputs
+            if (!keyId || !orderId) {
+                errorMsg.style.display = 'block';
+                return;
+            }
+            errorMsg.style.display = 'none';
+
+            // 3. Setup Razorpay options using the typed inputs
+           var options = {
+                "key": keyId,
+                "amount": "200000", // Amount in paise (₹2000)
+                "currency": "INR",
+                "name": "EMS University",
+                "description": "Exam Registration Fee Test",
+                "order_id": orderId,
+
+                // 4. Handle Success
+                "handler": function (response) {
+                    // Apply styles dynamically to ensure long signatures wrap perfectly
+                    responseBox.style.display = 'block';
+                    responseBox.style.whiteSpace = 'pre-wrap';       // Preserves JSON indentations but allows wrapping
+                    responseBox.style.wordWrap = 'break-word';       // Breaks long words (like the signature)
+                    responseBox.style.overflowWrap = 'break-word';   // Modern equivalent for word-wrap
+                    responseBox.style.overflowX = 'auto';            // Adds scrollbar if it still manages to overflow
+
+                    responseBox.innerHTML =
+                        "<b>✅ PAYMENT SUCCESS! Copy this to Postman:</b><br><br>" +
+                        JSON.stringify({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                            exam_reg_id: examRegId
+                        }, null, 4);
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            
+            // 5. Initialize and open
+            try {
+                var rzp1 = new Razorpay(options);
+
+                // Handle payment failure scenario
+                rzp1.on('payment.failed', function (response) {
+                    alert("Payment Failed: " + response.error.description);
+                });
+
+                rzp1.open();
+            } catch (err) {
+                alert("Failed to load Razorpay. Check your Key ID.");
+                console.error(err);
+            }
+        }
+    </script>
+</body>
+
+</html>

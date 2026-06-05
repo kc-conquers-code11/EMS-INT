@@ -1,0 +1,507 @@
+{
+  "info": {
+    "name": "EMS Allocation and Hall Ticket APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRoX2lkIjoiZTFmMzYwMGMtMDI3Ni00Mzk1LWEyM2ItYzBiMzg3YTNmMzAxIiwiaWQiOiI0NzM5Zjg4Zi1mZWM3LTRhYTktOTJiMS00NjM2ZDYyYTgyOGQiLCJ1dGlkIjoxLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3ODAxNDkxNjMsImV4cCI6MTc4MDIzNTU2M30.wh1IU7wyupQ42pSeukarG63r2x5IFuLJ7xgPaHSzYnI",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Hall Ticket Module",
+      "item": [
+        {
+          "name": "Get Settings",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/hall-ticket/settings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hall-ticket",
+                "settings"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Settings",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"is_enabled\": true,\n  \"instructions\": [\"Please arrive 30 mins early.\", \"Bring your original ID.\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/hall-ticket/settings",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hall-ticket",
+                "settings"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Download Hall Ticket",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/hall-ticket/download/57ba62ff-3e61-4384-b940-4dfdd92da14e",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "hall-ticket",
+                "download",
+                "57ba62ff-3e61-4384-b940-4dfdd92da14e"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Allocation Module",
+      "item": [
+        {
+          "name": "Block Allocation",
+          "item": [
+            {
+              "name": "Create Block",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"block_no\": \"BLOCK-F\",\n  \"allocated_capacity\": 40\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/blocks",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "blocks"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get All Blocks",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/blocks",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "blocks"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Block by ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/blocks/a1b2c3d4-e5f6-7890-abcd-ef1234567801",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "blocks",
+                    "a1b2c3d4-e5f6-7890-abcd-ef1234567801"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update Block",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"allocated_capacity\": 35\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/blocks/a1b2c3d4-e5f6-7890-abcd-ef1234567801",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "blocks",
+                    "a1b2c3d4-e5f6-7890-abcd-ef1234567801"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Delete Block",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/blocks/a1b2c3d4-e5f6-7890-abcd-ef1234567801",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "blocks",
+                    "a1b2c3d4-e5f6-7890-abcd-ef1234567801"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Supervisor Allocation",
+          "item": [
+            {
+              "name": "Create Supervisor Allocation",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"faculty_id\": \"b3c4d5e6-f7a8-9b0c-1d2e-3f4a5b6c7d8e\",\n  \"duty_status\": \"assigned\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/supervisors",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "supervisors"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get All Supervisor Allocations",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/supervisors",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "supervisors"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Supervisor Allocation by ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/supervisors/c1b2c3d4-e5f6-7890-abcd-ef1234567801",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "supervisors",
+                    "c1b2c3d4-e5f6-7890-abcd-ef1234567801"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update Supervisor Allocation",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"duty_status\": \"accepted\",\n  \"remarks\": \"Duty accepted\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/supervisors/c1b2c3d4-e5f6-7890-abcd-ef1234567801",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "supervisors",
+                    "c1b2c3d4-e5f6-7890-abcd-ef1234567801"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Delete Supervisor Allocation",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/supervisors/c1b2c3d4-e5f6-7890-abcd-ef1234567801",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "supervisors",
+                    "c1b2c3d4-e5f6-7890-abcd-ef1234567801"
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "name": "Student Seating",
+          "item": [
+            {
+              "name": "Create Student Seating",
+              "request": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"block_id\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567801\",\n  \"exam_reg_id\": \"c25e8a15-b740-410a-b28f-124b61ac86de\",\n  \"seat_no\": \"A-15\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/seats",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "seats"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get All Student Seatings",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/seats",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "seats"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Get Student Seating by ID",
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/seats/d1b2c3d4-e5f6-7890-abcd-ef1234567801",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "seats",
+                    "d1b2c3d4-e5f6-7890-abcd-ef1234567801"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Update Student Seating",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"seat_no\": \"A-16\"\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/seats/d1b2c3d4-e5f6-7890-abcd-ef1234567801",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "seats",
+                    "d1b2c3d4-e5f6-7890-abcd-ef1234567801"
+                  ]
+                }
+              }
+            },
+            {
+              "name": "Delete Student Seating",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/allocate/seats/d1b2c3d4-e5f6-7890-abcd-ef1234567801",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "allocate",
+                    "seats",
+                    "d1b2c3d4-e5f6-7890-abcd-ef1234567801"
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

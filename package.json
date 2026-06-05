@@ -1,0 +1,74 @@
+{
+  "name": "ems-backend",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "description": "Exam Management System Backend",
+  "homepage": "https://github.com/surajm-dev/EMS-Backend#readme",
+  "bugs": {
+    "url": "https://github.com/surajm-dev/EMS-Backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/surajm-dev/EMS-Backend.git"
+  },
+  "license": "ISC",
+  "author": "Shreyas Mane",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "build": "echo \"Build completed\"",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:sync": "node src/config/syncDb.js",
+    "seed": "node src/seeders/seed.js",
+    "puppeteer:install": "node scripts/install-puppeteer-chrome.js",
+    "postinstall": "node scripts/install-puppeteer-chrome.js --optional",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "exam",
+    "management",
+    "backend",
+    "express",
+    "sequelize",
+    "mysql"
+  ],
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "bullmq": "^5.78.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "mysql2": "^3.22.3",
+    "nodemailer": "^7.0.13",
+    "pdfkit": "^0.18.0",
+    "pdfkit-table": "^0.1.99",
+    "puppeteer": "^25.1.0",
+    "razorpay": "^2.9.6",
+    "sequelize": "^6.37.8",
+    "sequelize-auto": "^0.8.8",
+    "sequelize-cli": "^6.6.5",
+    "umzug": "^3.8.3",
+    "uuid": "^13.0.2",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/pdfkit": "^0.17.5",
+    "@types/uuid": "^10.0.0",
+    "eslint": "^9.39.2",
+    "jest": "^30.3.0",
+    "nodemon": "^3.1.11",
+    "prettier": "^3.7.4",
+    "supertest": "^7.2.2"
+  }
+}

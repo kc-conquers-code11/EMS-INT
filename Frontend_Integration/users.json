@@ -1,0 +1,20 @@
+{
+  "COE": {
+    "role": "Controller of Examinations (Admin)",
+    "email": "coe@pvppcoe.ac.in",
+    "password": "password123",
+    "workspace_url": "/semester"
+  },
+  "Student": {
+    "role": "Student",
+    "email": "student@pvppcoe.ac.in",
+    "password": "password123",
+    "workspace_url": "/student/view-result"
+  },
+  "Faculty": {
+    "role": "Faculty",
+    "email": "faculty@pvppcoe.ac.in",
+    "password": "password123",
+    "workspace_url": "/faculty/blockwise-allocation"
+  }
+}
