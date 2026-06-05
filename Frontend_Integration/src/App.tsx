@@ -49,7 +49,8 @@ import { ResultProcessingPage } from './pages/COE/ResultProcessing/ResultProcess
 import PublishResultPage from './pages/COE/PublishResult/PublishResultPage';
 import UnlockMarksheetPage from './pages/COE/UnlockMarksheet/UnlockMarksheetPage';
 import PaperRequestTrigger from './pages/COE/PaperRequestTrigger';
-import ReviewQP from './pages/COE/ReviewQP';
+import { ReviewQP } from './pages/COE/ReviewQP';
+import { PrintQP } from './pages/COE/PrintQP';
 
 // Student
 import { ViewResultPage } from './pages/Student/Result/ViewResultPage';
@@ -123,6 +124,7 @@ function App() {
           <Route path="/unlock-marksheet" element={<UnlockMarksheetPage />} />
           <Route path="/paper-request-trigger" element={<PaperRequestTrigger />} />
           <Route path="/review-qp/:set_id" element={<ReviewQP />} />
+          <Route path="/print-qp/:set_id" element={<PrintQP />} />
         </Route>
       </Route>
 

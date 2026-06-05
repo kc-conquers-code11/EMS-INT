@@ -67,7 +67,7 @@ export const PaperRequestsDashboard: React.FC = () => {
                         req.paper_status === 'DRAFT' ? 'bg-orange-100 text-orange-800' :
                         req.paper_status === 'REJECTED' ? 'bg-red-100 text-red-800' : 
                         req.paper_status === 'SUBMITTED_TO_COE' ? 'bg-blue-100 text-blue-800' :
-                        req.paper_status === 'APPROVED' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                        req.paper_status === 'FINAL_LOCKED' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                       }`}>
                         {req.paper_status}
                       </span>

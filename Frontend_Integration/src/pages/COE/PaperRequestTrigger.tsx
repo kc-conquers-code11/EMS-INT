@@ -208,7 +208,7 @@ export const PaperRequestTrigger: React.FC = () => {
                           req.paper_status === 'REQUESTED' ? 'bg-yellow-100 text-yellow-800' : 
                           req.paper_status === 'DRAFT' ? 'bg-orange-100 text-orange-800' : 
                           req.paper_status === 'SUBMITTED_TO_COE' ? 'bg-blue-100 text-blue-800' :
-                          req.paper_status === 'APPROVED' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                          req.paper_status === 'FINAL_LOCKED' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                         }`}>
                           {req.paper_status}
                         </span>
@@ -220,6 +220,13 @@ export const PaperRequestTrigger: React.FC = () => {
                             className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded shadow text-sm font-medium transition-colors"
                           >
                             Review
+                          </button>
+                        ) : req.paper_status === 'FINAL_LOCKED' ? (
+                          <button 
+                            onClick={() => window.open(`/print-qp/${req.set_id}`, '_blank')}
+                            className="bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded shadow text-sm font-medium transition-colors"
+                          >
+                            Download PDF
                           </button>
                         ) : (
                           <span className="text-gray-400 italic">-</span>
