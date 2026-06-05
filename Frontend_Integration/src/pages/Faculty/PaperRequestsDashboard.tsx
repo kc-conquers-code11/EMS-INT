@@ -4,8 +4,9 @@ import api from '../../services/api';
 
 interface AssignedRequest {
   set_id: string;
-  exam_event?: { event_name: string };
-  subject?: { subject_name: string; subject_code: string };
+  event_name?: string;
+  subject_name?: string;
+  subject_code?: string;
   submission_deadline: string;
   paper_status: string;
 }
@@ -57,15 +58,15 @@ export const PaperRequestsDashboard: React.FC = () => {
               <tbody className="divide-y divide-gray-200">
                 {requests.map(req => (
                   <tr key={req.set_id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm font-medium text-gray-800">{req.exam_event?.event_name || '-'}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{req.subject?.subject_code ? `[${req.subject.subject_code}] ` : ''}{req.subject?.subject_name || '-'}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-800">{req.event_name || '-'}</td>
+                    <td className="px-6 py-4 text-sm text-gray-600">{req.subject_code ? `[${req.subject_code}] ` : ''}{req.subject_name || '-'}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">{req.submission_deadline || '-'}</td>
                     <td className="px-6 py-4 text-sm">
                       <span className={`px-2 py-1 rounded text-xs font-semibold ${
                         req.paper_status === 'REQUESTED' ? 'bg-yellow-100 text-yellow-800' : 
                         req.paper_status === 'DRAFT' ? 'bg-orange-100 text-orange-800' :
                         req.paper_status === 'REJECTED' ? 'bg-red-100 text-red-800' : 
-                        req.paper_status === 'SUBMITTED' ? 'bg-blue-100 text-blue-800' :
+                        req.paper_status === 'SUBMITTED_TO_COE' ? 'bg-blue-100 text-blue-800' :
                         req.paper_status === 'APPROVED' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                       }`}>
                         {req.paper_status}

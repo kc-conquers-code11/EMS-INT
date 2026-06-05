@@ -47,7 +47,7 @@ export const ReviewQP: React.FC = () => {
       });
       
       alert(`Question Paper has been ${status.toLowerCase()} successfully.`);
-      navigate('/coe/paper-request-trigger');
+      navigate('/paper-request-trigger');
     } catch (error: any) {
       console.error('Failed to submit review:', error);
       alert('Failed to submit review: ' + (error.response?.data?.message || error.message));
@@ -68,7 +68,7 @@ export const ReviewQP: React.FC = () => {
             </div>
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => navigate('/coe/paper-request-trigger')}
+                onClick={() => navigate('/paper-request-trigger')}
                 className="text-gray-600 hover:text-gray-900 text-sm font-medium"
               >
                 Back

@@ -206,7 +206,7 @@ class PaperSetService {
       throw new Error('Question paper request not found or not assigned to you');
     }
 
-    if (paper.paper_status !== PAPER_STATUS.ACCEPTED && paper.paper_status !== PAPER_STATUS.DRAFT) {
+    if (paper.paper_status !== PAPER_STATUS.REQUESTED && paper.paper_status !== PAPER_STATUS.ACCEPTED && paper.paper_status !== PAPER_STATUS.DRAFT) {
        throw new Error(`Cannot save draft when status is ${paper.paper_status}.`);
     }
 

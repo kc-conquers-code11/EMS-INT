@@ -139,6 +139,7 @@ async function seedQPTest() {
     let examEvent = await models.exam_event.findOne({ where: { event_name: 'Winter 2026' } });
     if (!examEvent) {
       examEvent = await models.exam_event.create({
+        institution_id: institution.institution_id,
         event_name: 'Winter 2026',
         event_code: 'W26',
         status: 'Active'
