@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcrypt');
 const db = require('./src/config/db.js');
 const initModels = require('./src/models/init-models');
 
@@ -6,6 +7,8 @@ async function seedHODs() {
   try {
     const models = initModels(db);
     console.log('Syncing database...');
+    
+    const passwordHash = await bcrypt.hash('password123', 10);
     // We assume tables already exist and synced.
 
     // 1. Create User Type for Faculty if not exists
@@ -60,7 +63,7 @@ async function seedHODs() {
         user = await models.users.create({
           email,
           user_type: facultyUserType.utid,
-          password: 'hashed_password_placeholder',
+          password: passwordHash,
           is_active: true
         });
       }
