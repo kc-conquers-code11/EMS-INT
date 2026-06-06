@@ -1,4 +1,4 @@
-const db = require('../../models');
+const db = require('../../../models');
 
 const getAllCopyCases = async (req, res) => {
   try {

@@ -74,6 +74,8 @@ import CourseOutcomes from './pages/Faculty/CourseOutcomes';
 import CoPoMapping from './pages/Faculty/CoPoMapping';
 import PaperRequestsDashboard from './pages/Faculty/PaperRequestsDashboard';
 import QPBuilderLayout from './pages/Faculty/QPBuilder/QPBuilderLayout';
+import { MarksheetVerificationPage } from './pages/Faculty/Analytics/MarksheetVerificationPage';
+import { COPOAttainmentReport } from './pages/Faculty/Analytics/COPOAttainmentReport';
 
 function App() {
   return (
@@ -163,6 +165,8 @@ function App() {
           <Route path="/faculty/co-po-mapping" element={<CoPoMapping />} />
           <Route path="/faculty/paper-requests" element={<PaperRequestsDashboard />} />
           <Route path="/faculty/qp-builder/:set_id" element={<QPBuilderLayout />} />
+          <Route path="/faculty/marksheet-verification/:mapping_id" element={<MarksheetVerificationPage />} />
+          <Route path="/faculty/copo-attainment/:mapping_id" element={<COPOAttainmentReport />} />
         </Route>
       </Route>
 
