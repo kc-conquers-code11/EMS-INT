@@ -43,6 +43,7 @@ const hodApprovalRoutes = require('./routes/hod/hodApproval.route.js');
 const copyCaseProcessRoutes = require('./routes/coe/copyCaseProcess.route.js');
 
 const studentRevalRoutes = require('./routes/student/reval.route.js');
+const postExamRoutes = require('./routes/student/postExam.route.js');
 const coeRevalAssignmentRoutes = require('./routes/coe/revalAssignment.route.js');
 const paperSetRoutes = require('./routes/exam/paperSet.route.js');
 
@@ -126,6 +127,7 @@ app.use('/api/v1/faculty/analytics', analyticsRoutes);
 app.use('/api/v1/hod/approval', hodApprovalRoutes);
 app.use('/api/v1/coe/copy-case', copyCaseProcessRoutes);
 app.use('/api/v1/student/revaluation', studentRevalRoutes);
+app.use('/api/v1/student/post-exam', postExamRoutes);
 app.use('/api/v1/coe/reval-assignment', coeRevalAssignmentRoutes);
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });

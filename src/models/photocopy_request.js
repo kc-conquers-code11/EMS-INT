@@ -3,33 +3,33 @@ module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
     'photocopy_request',
     {
-      req_id: {
-        autoIncrement: true,
-        type: DataTypes.INTEGER,
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
         allowNull: false,
         primaryKey: true,
       },
-      result_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+      student_prn: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
       },
-      sid: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+      subject_mapping_id: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
       },
-      req_status: {
+      component: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
+      fee_status: {
+        type: DataTypes.ENUM('PENDING', 'PAID'),
+        allowNull: true,
+        defaultValue: 'PENDING',
+      },
+      status: {
         type: DataTypes.STRING(30),
         allowNull: true,
-        defaultValue: 'pending',
-      },
-      fee_paid: {
-        type: DataTypes.DECIMAL(8, 2),
-        allowNull: true,
-      },
-      requested_at: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
+        defaultValue: 'APPLIED',
       },
     },
     {
@@ -41,7 +41,7 @@ module.exports = function (sequelize, DataTypes) {
           name: 'PRIMARY',
           unique: true,
           using: 'BTREE',
-          fields: [{ name: 'req_id' }],
+          fields: [{ name: 'id' }],
         },
       ],
     }

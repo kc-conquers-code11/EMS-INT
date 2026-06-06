@@ -10,6 +10,8 @@ import { CoeRevalAssignment } from './pages/COE/CoeRevalAssignment';
 
 // Student Pages
 import { StudentRevalApplication } from './pages/Student/StudentRevalApplication';
+import { StudentReassessment } from './pages/Student/StudentReassessment';
+import { StudentPhotocopy } from './pages/Student/StudentPhotocopy';
 
 
 import { HodRoute } from './routes/HodRoute';
@@ -148,6 +150,8 @@ function App() {
           <Route path="/student/backlog-exam" element={<BacklogRegistrationPage />} />
           <Route path="/student/exam-registration" element={<ExamRegistrationPage />} />
           <Route path="/student/revaluation-application" element={<StudentRevalApplication />} />
+          <Route path="/student/reassessment" element={<StudentReassessment />} />
+          <Route path="/student/photocopy" element={<StudentPhotocopy />} />
         </Route>
       </Route>
 
