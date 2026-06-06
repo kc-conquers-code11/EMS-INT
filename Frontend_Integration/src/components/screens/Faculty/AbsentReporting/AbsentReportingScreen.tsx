@@ -530,6 +530,7 @@ export const AbsentReportingScreen: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
       {/* ── COPY CASE MODAL ── */}
       {copyCaseStudent && (
         <CopyCaseModal 

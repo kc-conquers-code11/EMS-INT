@@ -36,6 +36,8 @@ const hallTicketRoutes = require('./routes/hall_ticket/hallTicket.route.js');
 
 const allocationRoutes = require('./routes/allocation/allocation.route');
 const examExecutionRoutes = require('./routes/faculty/examExecution.route.js');
+const marksEntryRoutes = require('./routes/faculty/marksEntry.route.js');
+const hodApprovalRoutes = require('./routes/hod/hodApproval.route.js');
 
 const paperSetRoutes = require('./routes/exam/paperSet.route.js');
 
@@ -113,6 +115,8 @@ app.use('/api/v1/hall-ticket', hallTicketRoutes);
 
 app.use('/api/v1/allocate', allocationRoutes);
 app.use('/api/v1/faculty/exam-execution', examExecutionRoutes);
+app.use('/api/v1/faculty/marks-entry', marksEntryRoutes);
+app.use('/api/v1/hod/approval', hodApprovalRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });

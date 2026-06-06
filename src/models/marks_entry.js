@@ -10,11 +10,11 @@ module.exports = function (sequelize, DataTypes) {
         primaryKey: true,
       },
       reg_subj_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true,
       },
       faculty_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true,
       },
       component: {
@@ -39,7 +39,20 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: true,
       },
       locked_by: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
+        allowNull: true,
+      },
+      is_approved: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: 0,
+      },
+      approved_by: {
+        type: DataTypes.UUID,
+        allowNull: true,
+      },
+      approved_at: {
+        type: DataTypes.DATE,
         allowNull: true,
       },
     },
