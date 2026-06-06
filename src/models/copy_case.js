@@ -48,7 +48,7 @@ module.exports = function (sequelize, DataTypes) {
       case_status: {
         type: DataTypes.STRING(30),
         allowNull: true,
-        defaultValue: 'new',
+        defaultValue: 'PENDING',
       },
       coe_remark: {
         type: DataTypes.TEXT,

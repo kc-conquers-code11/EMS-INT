@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ClipboardList, AlertTriangle } from 'lucide-react';
-import { axiosInstance } from '../../../utils/axiosInstance';
+import { axiosInstance } from '../../utils/axiosInstance';
 import { HodAuditScreen } from './HodAuditScreen';
 
 interface DepartmentSubject {

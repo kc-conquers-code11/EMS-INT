@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, AlertTriangle, CheckCircle, Unlock } from 'lucide-react';
-import { axiosInstance } from '../../../../utils/axiosInstance';
+import { axiosInstance } from '../../utils/axiosInstance';
 
 interface RosterStudent {
   reg_subj_id: string;
