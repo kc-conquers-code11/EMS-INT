@@ -34,17 +34,17 @@ const createDuty = async (data) => {
 
   await db.sequelize.query(
     `INSERT INTO supervisor_allocation 
-      (duty_id, timetable_id, room_id, faculty_id, duty_status, assigned_at, accepted_at, remarks, createdAt, updatedAt)
+      (duty_id, timetable_id, room_id, faculty_id, duty_status, assigned_at, accepted_at, conflict_reason, createdAt, updatedAt)
      VALUES 
-      (:duty_id, :timetable_id, :room_id, :faculty_id, :duty_status, :now, NULL, :remarks, :now, :now)`,
+      (:duty_id, :timetable_id, :room_id, :faculty_id, :duty_status, :now, NULL, :conflict_reason, :now, :now)`,
     {
       replacements: {
         duty_id,
         timetable_id: validated.timetable_id || null,
         room_id: validated.room_id || null,
         faculty_id: validated.faculty_id,
-        duty_status: validated.duty_status || 'assigned',
-        remarks: validated.remarks || null,
+        duty_status: validated.duty_status || 'PENDING',
+        conflict_reason: validated.conflict_reason || null,
         now,
       },
       type: db.Sequelize.QueryTypes.INSERT,
@@ -189,14 +189,14 @@ const deleteDuty = async (duty_id) => {
 const acceptDuty = async (duty_id) => {
   const duty = await getDutyById(duty_id);
   
-  if (duty.duty_status !== 'assigned') {
-    throw { status: 409, message: 'Only assigned duties can be accepted' };
+  if (duty.duty_status !== 'PENDING') {
+    throw { status: 409, message: 'Only PENDING duties can be accepted' };
   }
 
   const now = new Date();
   await db.sequelize.query(
     `UPDATE supervisor_allocation 
-     SET duty_status = 'accepted', accepted_at = :now, updatedAt = :now 
+     SET duty_status = 'ACCEPTED', accepted_at = :now, updatedAt = :now 
      WHERE duty_id = :duty_id`,
     {
       replacements: { duty_id, now },
@@ -207,20 +207,73 @@ const acceptDuty = async (duty_id) => {
   return getDutyById(duty_id);
 };
 
-const rejectDuty = async (duty_id, remarks) => {
+const rejectDuty = async (duty_id, conflict_reason) => {
   const duty = await getDutyById(duty_id);
   
-  if (duty.duty_status !== 'assigned') {
-    throw { status: 409, message: 'Only assigned duties can be rejected' };
+  if (duty.duty_status !== 'PENDING') {
+    throw { status: 409, message: 'Only PENDING duties can be rejected' };
   }
 
   const now = new Date();
   await db.sequelize.query(
     `UPDATE supervisor_allocation 
-     SET duty_status = 'rejected', remarks = :remarks, updatedAt = :now 
+     SET duty_status = 'CONFLICT', conflict_reason = :conflict_reason, updatedAt = :now 
      WHERE duty_id = :duty_id`,
     {
-      replacements: { duty_id, remarks: remarks || null, now },
+      replacements: { duty_id, conflict_reason: conflict_reason || null, now },
+      type: db.Sequelize.QueryTypes.UPDATE,
+    }
+  );
+
+  return getDutyById(duty_id);
+};
+
+const getFacultyDuties = async (faculty_id) => {
+  const rows = await db.sequelize.query(
+    `SELECT 
+      sa.duty_id,
+      sa.faculty_id,
+      sa.duty_status as status,
+      sa.assigned_at,
+      sa.accepted_at,
+      sa.conflict_reason,
+      t.exam_date as date,
+      t.shift as time,
+      s.subject_name,
+      r.room_name as room_no
+     FROM supervisor_allocation sa
+     LEFT JOIN timetable t ON sa.timetable_id = t.timetable_id
+     LEFT JOIN semester_subject_mapping ssm ON t.mapping_id = ssm.mapping_id
+     LEFT JOIN subject s ON ssm.subject_id = s.subject_id
+     LEFT JOIN room r ON sa.room_id = r.room_id
+     WHERE sa.faculty_id = :faculty_id
+     ORDER BY t.exam_date ASC`,
+    {
+      replacements: { faculty_id },
+      type: db.Sequelize.QueryTypes.SELECT,
+    }
+  );
+  return rows;
+};
+
+const updateDutyStatus = async (duty_id, status, conflict_reason) => {
+  const duty = await getDutyById(duty_id);
+  const now = new Date();
+  
+  await db.sequelize.query(
+    `UPDATE supervisor_allocation 
+     SET duty_status = :status, 
+         conflict_reason = :conflict_reason, 
+         accepted_at = CASE WHEN :status = 'ACCEPTED' THEN :now ELSE accepted_at END,
+         updatedAt = :now 
+     WHERE duty_id = :duty_id`,
+    {
+      replacements: { 
+        duty_id, 
+        status, 
+        conflict_reason: conflict_reason || null, 
+        now 
+      },
       type: db.Sequelize.QueryTypes.UPDATE,
     }
   );
@@ -236,4 +289,6 @@ module.exports = {
   deleteDuty,
   acceptDuty,
   rejectDuty,
+  getFacultyDuties,
+  updateDutyStatus,
 };

@@ -22,7 +22,7 @@ export interface SupervisorAllocation {
   duty_status: SupervisorDutyStatus;
   assigned_at?: string; // ISO datetime
   accepted_at?: string; // ISO datetime
-  remarks?: string;
+  conflict_reason?: string;
 }
 
 // ── Status union type ──────────────────────────────────────────

@@ -9,16 +9,20 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: false,
         primaryKey: true,
       },
+      seating_id: {
+        type: DataTypes.UUID,
+        allowNull: true,
+      },
       sid: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true,
       },
       timetable_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true,
       },
       room_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true,
       },
       seat_no: {
@@ -38,7 +42,7 @@ module.exports = function (sequelize, DataTypes) {
         allowNull: true,
       },
       supervisor_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true,
       },
       case_status: {

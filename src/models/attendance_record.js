@@ -10,7 +10,7 @@ module.exports = function (sequelize, DataTypes) {
         primaryKey: true,
       },
       seating_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true,
       },
       is_present: {
@@ -19,7 +19,7 @@ module.exports = function (sequelize, DataTypes) {
         defaultValue: 0,
       },
       submitted_by: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,
         allowNull: true,
       },
       submitted_at: {

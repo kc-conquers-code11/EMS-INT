@@ -35,6 +35,7 @@ const facultySubjectMappingRoutes = require('./routes/programme/facultySubjectMa
 const hallTicketRoutes = require('./routes/hall_ticket/hallTicket.route.js');
 
 const allocationRoutes = require('./routes/allocation/allocation.route');
+const examExecutionRoutes = require('./routes/faculty/examExecution.route.js');
 
 const paperSetRoutes = require('./routes/exam/paperSet.route.js');
 
@@ -111,6 +112,7 @@ app.use('/api/v1/co-po-mappings', coPoMappingRoutes);
 app.use('/api/v1/hall-ticket', hallTicketRoutes);
 
 app.use('/api/v1/allocate', allocationRoutes);
+app.use('/api/v1/faculty/exam-execution', examExecutionRoutes);
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });

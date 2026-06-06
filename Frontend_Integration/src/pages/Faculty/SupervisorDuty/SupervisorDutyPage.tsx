@@ -1,18 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, SlidersHorizontal, ChevronLeft, ChevronRight } from 'lucide-react';
 import { FeedbackModal } from '../../../components/modals/FeedbackModal';
 import { RaiseConflictModal } from '../../../components/screens/Faculty/SupervisorDuty/RaiseConflictModal';
-import type { SupervisorDuty, SupervisorDutyModalType } from '../../../types/Faculty/supervisorDuty';
-
-const MOCK_DUTIES: SupervisorDuty[] = [
-  { duty_id: 1, timetable_id: 101, room_id: 201, faculty_id: 501, date: '20/05/26', time: '2:00 to 3:00 pm', subject_name: 'Automata Theory', room_no: '203', duty_status: 'Pending' },
-  { duty_id: 2, timetable_id: 102, room_id: 201, faculty_id: 501, date: '20/05/26', time: '2:00 to 3:00 pm', subject_name: 'Networking', room_no: '203', duty_status: 'Pending' },
-  { duty_id: 3, timetable_id: 103, room_id: 201, faculty_id: 501, date: '20/05/26', time: '2:00 to 3:00 pm', subject_name: 'Operating System', room_no: '203', duty_status: 'Pending' },
-];
+import type { SupervisorDutyView, SupervisorDutyStatus } from '../../../types/Faculty/supervisorDuty';
+import { axiosInstance } from '../../../utils/axiosInstance';
 
 export const SupervisorDutyPage = () => {
   const [activeTab, setActiveTab] = useState<'View Assigned Duties' | 'View Status' | 'Pending Duties'>('View Assigned Duties');
-  const [duties, setDuties] = useState<SupervisorDutyView[]>(MOCK_DUTIES);
+  const [duties, setDuties] = useState<SupervisorDutyView[]>([]);
   
   // Modals state
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
@@ -22,29 +17,50 @@ export const SupervisorDutyPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = 10;
 
+  useEffect(() => {
+    fetchDuties();
+  }, []);
+
+  const fetchDuties = async () => {
+    try {
+      const response = await axiosInstance.get('/allocate/supervisors/faculty-duties');
+      if (response.data?.success) {
+        setDuties(response.data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching duties:', error);
+    }
+  };
+
   // ── Actions ─────────────────────────────────────────────────
-  const handleAccept = (item: SupervisorDutyView) => {
-    // In production: Call API to accept duty, setting duty_status to 'Accepted' and accepted_at to now
-    setDuties(prev => prev.map(d => d.duty_id === item.duty_id ? { ...d, duty_status: 'Accepted', accepted_at: new Date().toISOString() } : d));
-    setIsSuccessModalOpen(true);
+  const handleAccept = async (item: SupervisorDutyView) => {
+    try {
+      await axiosInstance.put(`/allocate/supervisors/${item.duty_id}/status`, { status: 'ACCEPTED' });
+      setDuties(prev => prev.map(d => d.duty_id === item.duty_id ? { ...d, duty_status: 'ACCEPTED' as SupervisorDutyStatus, accepted_at: new Date().toISOString() } : d));
+      setIsSuccessModalOpen(true);
+    } catch (error) {
+      console.error('Error accepting duty:', error);
+    }
   };
 
   const handleConflict = (item: SupervisorDutyView) => {
     setConflictModalItem(item);
   };
 
-  const handleConflictSubmit = (reason: string) => {
-    // In production: Call API to submit conflict with reason in 'remarks'
-    console.log("Conflict raised for duty", conflictModalItem?.duty_id, "Reason:", reason);
+  const handleConflictSubmit = async (reason: string) => {
     if (conflictModalItem) {
-      setDuties(prev => prev.map(d => d.duty_id === conflictModalItem.duty_id ? { ...d, duty_status: 'Conflict', remarks: reason } : d));
+      try {
+        await axiosInstance.put(`/allocate/supervisors/${conflictModalItem.duty_id}/status`, { status: 'CONFLICT', conflict_reason: reason });
+        setDuties(prev => prev.map(d => d.duty_id === conflictModalItem.duty_id ? { ...d, duty_status: 'CONFLICT' as SupervisorDutyStatus, conflict_reason: reason } : d));
+      } catch (error) {
+        console.error('Error raising conflict:', error);
+      }
     }
     setConflictModalItem(null);
   };
 
   const handleHold = (item: SupervisorDutyView) => {
-    // In production: Call API to put duty on hold
-    setDuties(prev => prev.map(d => d.duty_id === item.duty_id ? { ...d, duty_status: 'Hold' } : d));
+    setDuties(prev => prev.map(d => d.duty_id === item.duty_id ? { ...d, duty_status: 'Hold' as SupervisorDutyStatus } : d));
   };
 
   // ── Pagination Helper ──────────────────────────────────────
@@ -132,7 +148,7 @@ export const SupervisorDutyPage = () => {
           </thead>
           <tbody>
             {duties
-              .filter(d => activeTab === 'Pending Duties' ? d.duty_status === 'Pending' : true)
+              .filter(d => activeTab === 'Pending Duties' ? d.duty_status === 'PENDING' : true)
               .map((duty, index) => (
               <tr key={duty.duty_id} className="border-b border-[#eaecf0] hover:bg-slate-50/50 transition-colors group">
                 <td className="px-8 py-6 text-[15px] font-medium text-[#475467]">{index + 1}</td>
@@ -147,17 +163,17 @@ export const SupervisorDutyPage = () => {
                         onClick={() => handleAccept(duty)}
                         className="min-w-[100px] py-2 bg-[#0e1680] text-white text-[14px] font-bold rounded-[8px] hover:bg-[#0a1060] transition-colors shadow-sm"
                       >
-                        {duty.duty_status === 'Accepted' ? 'Accepted ✓' : 'Accept'}
+                        {duty.duty_status === 'ACCEPTED' ? 'Accepted ✓' : 'Accept'}
                       </button>
                       <button
                         onClick={() => handleConflict(duty)}
                         className={`min-w-[100px] py-2 text-[14px] font-bold rounded-[8px] transition-colors shadow-sm ${
-                          duty.duty_status === 'Conflict'
+                          duty.duty_status === 'CONFLICT'
                             ? 'bg-red-50 text-red-600 border border-red-200'
                             : 'bg-[#0e1680] text-white hover:bg-[#0a1060]'
                         }`}
                       >
-                        {duty.duty_status === 'Conflict' ? 'Conflicted' : 'Conflict'}
+                        {duty.duty_status === 'CONFLICT' ? 'Conflicted' : 'Conflict'}
                       </button>
                       <button
                         onClick={() => handleHold(duty)}
@@ -174,8 +190,8 @@ export const SupervisorDutyPage = () => {
                 ) : (
                   <td className="px-8 py-6 text-[15px] font-medium">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      duty.duty_status === 'Accepted' ? 'bg-[#effbe7] text-[#095512]' :
-                      duty.duty_status === 'Conflict' ? 'bg-red-50 text-red-700' :
+                      duty.duty_status === 'ACCEPTED' ? 'bg-[#effbe7] text-[#095512]' :
+                      duty.duty_status === 'CONFLICT' ? 'bg-red-50 text-red-700' :
                       duty.duty_status === 'Hold' ? 'bg-amber-50 text-amber-700' :
                       'bg-gray-100 text-gray-700'
                     }`}>

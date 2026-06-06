@@ -1,33 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, ChevronDown, X } from 'lucide-react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { axiosInstance } from '../../../../utils/axiosInstance';
+import { CopyCaseModal } from './CopyCaseModal';
+import type { SupervisorDutyView } from '../../../../types/Faculty/supervisorDuty';
 
-interface Student {
-  id: number;
-  studentId: string;
-  name: string;
-  seatNo: string;
-  isAbsent: boolean;
+export interface RosterStudent {
+  seating_id: string;
+  PRN: string;
+  student_name: string;
+  seat_no: string;
+  is_present: boolean;
 }
 
-const mockStudents: Student[] = [
-  { id: 1, studentId: 'VU4S23242019', name: 'xyzsyzsyz', seatNo: '12901', isAbsent: false },
-  { id: 2, studentId: 'VU4S23242023', name: 'abcabc', seatNo: '12902', isAbsent: false },
-  { id: 3, studentId: 'VU4S23242023', name: 'abcabc', seatNo: '12902', isAbsent: false },
-  { id: 4, studentId: 'VU4S23242023', name: 'abcabc', seatNo: '12902', isAbsent: true },
-  { id: 5, studentId: 'VU4S23242023', name: 'abcabc', seatNo: '12902', isAbsent: false },
-  { id: 6, studentId: 'VU4S23242023', name: 'abcabc', seatNo: '12902', isAbsent: false },
-  { id: 7, studentId: 'VU4S23242023', name: 'abcabc', seatNo: '12902', isAbsent: false },
-  { id: 8, studentId: 'VU4S23242023', name: 'abcabc', seatNo: '12902', isAbsent: true },
-  { id: 9, studentId: 'VU4S23242023', name: 'abcabc', seatNo: '12902', isAbsent: false },
-  { id: 10, studentId: 'VU4S23242023', name: 'abcabc', seatNo: '12902', isAbsent: false },
-  { id: 11, studentId: 'VU4S23242024', name: 'johndoe', seatNo: '12903', isAbsent: false },
-];
-
 export const AbsentReportingScreen: React.FC = () => {
+  const [duties, setDuties] = useState<SupervisorDutyView[]>([]);
+  const [selectedDuty, setSelectedDuty] = useState<SupervisorDutyView | null>(null);
+
   const [isLoaded, setIsLoaded] = useState(false);
-  const [students, setStudents] = useState<Student[]>([]);
+  const [students, setStudents] = useState<RosterStudent[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
   
@@ -42,7 +34,27 @@ export const AbsentReportingScreen: React.FC = () => {
   const [isViewMode, setIsViewMode] = useState(false);
   const [isDownloadSuccessOpen, setIsDownloadSuccessOpen] = useState(false);
 
-  const absentStudents = students.filter(s => s.isAbsent);
+  // Copy Case State
+  const [isCopyCaseOpen, setIsCopyCaseOpen] = useState(false);
+  const [copyCaseStudent, setCopyCaseStudent] = useState<RosterStudent | null>(null);
+
+  useEffect(() => {
+    const fetchDuties = async () => {
+      try {
+        const response = await axiosInstance.get('/allocate/supervisors/faculty-duties');
+        if (response.data?.success) {
+          const accepted = response.data.data.filter((d: SupervisorDutyView) => d.duty_status === 'ACCEPTED');
+          setDuties(accepted);
+          if (accepted.length > 0) setSelectedDuty(accepted[0]);
+        }
+      } catch (error) {
+        console.error('Error fetching duties:', error);
+      }
+    };
+    fetchDuties();
+  }, []);
+
+  const absentStudents = students.filter(s => !s.is_present);
 
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
@@ -65,12 +77,12 @@ export const AbsentReportingScreen: React.FC = () => {
 
     autoTable(doc, {
       startY: 78,
-      head: [['sr.no', 'Student ID', 'Student Name', 'Seat no', 'Attendance', 'Mark absent']],
+      head: [['sr.no', 'Student PRN', 'Student Name', 'Seat no', 'Attendance', 'Mark absent']],
       body: absentStudents.map((s, idx) => [
         (idx + 1).toString(),
-        s.studentId,
-        s.name,
-        s.seatNo,
+        s.PRN,
+        s.student_name,
+        s.seat_no,
         'Absent',
         'Yes'
       ]),
@@ -85,23 +97,44 @@ export const AbsentReportingScreen: React.FC = () => {
     setIsDownloadSuccessOpen(true);
   };
 
-  const handleLoadStudents = () => {
-    setStudents(mockStudents.map(s => ({ ...s }))); // Deep copy
-    setIsLoaded(true);
-    setCurrentPage(1);
-    setSubmitBtnClicked(false);
-    setResetBtnClicked(false);
-    setViewBtnClicked(false);
+  const handleLoadStudents = async () => {
+    if (!selectedDuty) return;
+    try {
+      const response = await axiosInstance.get(`/faculty/exam-execution/roster?timetable_id=${selectedDuty.timetable_id}&room_id=${selectedDuty.room_id}`);
+      if (response.data.success) {
+        setStudents(response.data.data.map((s: any) => ({ ...s, is_present: s.is_present === 1 || s.is_present === true })));
+        setIsLoaded(true);
+        setCurrentPage(1);
+        setSubmitBtnClicked(false);
+        setResetBtnClicked(false);
+        setViewBtnClicked(false);
+      }
+    } catch (error) {
+      console.error('Error loading roster:', error);
+    }
   };
 
-  const handleToggleAbsent = (id: number) => {
-    setStudents(prev => prev.map(s => s.id === id ? { ...s, isAbsent: !s.isAbsent } : s));
+  const handleToggleAbsent = (seating_id: string) => {
+    setStudents(prev => prev.map(s => s.seating_id === seating_id ? { ...s, is_present: !s.is_present } : s));
   };
 
   const handleReset = () => {
     setResetBtnClicked(true);
-    setStudents(mockStudents.map(s => ({ ...s }))); // Reset to initial mock
-    setIsLoaded(false); // Hide the table so user must click Load students again
+    setStudents([]);
+    setIsLoaded(false);
+  };
+
+  const handleSubmitAttendance = async () => {
+    if (!selectedDuty) return;
+    try {
+      await axiosInstance.post('/faculty/exam-execution/attendance', {
+        attendance_data: students.map(s => ({ seating_id: s.seating_id, is_present: s.is_present }))
+      });
+      setIsSubmitConfirmOpen(false);
+      setIsSubmitSuccessOpen(true);
+    } catch (error) {
+      console.error('Error submitting attendance:', error);
+    }
   };
 
   const totalPages = Math.ceil(students.length / itemsPerPage);
@@ -142,7 +175,7 @@ export const AbsentReportingScreen: React.FC = () => {
                 <thead>
                   <tr className="bg-[#f9fafb] border-b border-[#e4e7ec]">
                     <th className="py-4 px-6 text-[12px] font-semibold text-[#667085] w-20">sr.no</th>
-                    <th className="py-4 px-6 text-[12px] font-semibold text-[#667085]">Student ID</th>
+                    <th className="py-4 px-6 text-[12px] font-semibold text-[#667085]">Student PRN</th>
                     <th className="py-4 px-6 text-[12px] font-semibold text-[#667085]">Student Name</th>
                     <th className="py-4 px-6 text-[12px] font-semibold text-[#667085]">Seat no</th>
                     <th className="py-4 px-6 text-[12px] font-semibold text-[#667085]">Attendance</th>
@@ -151,11 +184,11 @@ export const AbsentReportingScreen: React.FC = () => {
                 </thead>
                 <tbody className="divide-y divide-[#e4e7ec]">
                   {viewPaginatedData.map((student, idx) => (
-                    <tr key={student.id} className="hover:bg-gray-50/50">
+                    <tr key={student.seating_id} className="hover:bg-gray-50/50">
                       <td className="py-4 px-6 text-[14px] text-[#475467]">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
-                      <td className="py-4 px-6 text-[14px] text-[#475467]">{student.studentId}</td>
-                      <td className="py-4 px-6 text-[14px] text-[#475467]">{student.name}</td>
-                      <td className="py-4 px-6 text-[14px] text-[#475467]">{student.seatNo}</td>
+                      <td className="py-4 px-6 text-[14px] text-[#475467]">{student.PRN}</td>
+                      <td className="py-4 px-6 text-[14px] text-[#475467]">{student.student_name}</td>
+                      <td className="py-4 px-6 text-[14px] text-[#475467]">{student.seat_no}</td>
                       <td className="py-4 px-6">
                         <span className="inline-flex items-center justify-center px-2.5 py-0.5 text-[12px] font-medium rounded-full bg-red-50 text-red-600 border border-red-200">
                           Absent
@@ -266,44 +299,27 @@ export const AbsentReportingScreen: React.FC = () => {
       <div className="flex flex-col gap-6">
         <div className="grid grid-cols-2 gap-x-12 gap-y-6">
           <div className="flex flex-col gap-2">
-            <label className="text-[13px] font-medium text-[#344054]">Select Session</label>
+            <label className="text-[13px] font-medium text-[#344054]">Select Duty Block</label>
             <div className="relative">
-              <select className="w-full h-11 pl-4 pr-10 bg-white border border-[#d0d5dd] rounded-lg text-[14px] text-[#101828] appearance-none focus:outline-none focus:border-[#9BA3F2] focus:ring-1 focus:ring-[#9BA3F2] shadow-sm cursor-pointer">
-                <option>Summer 2026</option>
-                <option>Winter 2026</option>
+              <select 
+                className="w-full h-11 pl-4 pr-10 bg-white border border-[#d0d5dd] rounded-lg text-[14px] text-[#101828] appearance-none focus:outline-none focus:border-[#9BA3F2] focus:ring-1 focus:ring-[#9BA3F2] shadow-sm cursor-pointer"
+                value={selectedDuty?.duty_id || ''}
+                onChange={(e) => {
+                  const duty = duties.find(d => d.duty_id.toString() === e.target.value);
+                  if (duty) setSelectedDuty(duty);
+                }}
+              >
+                {duties.length === 0 ? (
+                  <option value="">No accepted duties found</option>
+                ) : (
+                  duties.map(d => (
+                    <option key={d.duty_id} value={d.duty_id}>
+                      {d.date} | {d.time} | {d.subject_name} | {d.room_no}
+                    </option>
+                  ))
+                )}
               </select>
               <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[#667085] pointer-events-none" size={18} />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-[13px] font-medium text-[#344054]">Select block</label>
-            <div className="relative">
-              <select className="w-full h-11 pl-4 pr-10 bg-white border border-[#d0d5dd] rounded-lg text-[14px] text-[#101828] appearance-none focus:outline-none focus:border-[#9BA3F2] focus:ring-1 focus:ring-[#9BA3F2] shadow-sm cursor-pointer">
-                <option>Block A</option>
-                <option>Block B</option>
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[#667085] pointer-events-none" size={18} />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-[13px] font-medium text-[#344054]">Select Subject</label>
-            <div className="relative">
-              <select className="w-full h-11 pl-4 pr-10 bg-white border border-[#d0d5dd] rounded-lg text-[14px] text-[#475467] appearance-none focus:outline-none focus:border-[#9BA3F2] focus:ring-1 focus:ring-[#9BA3F2] shadow-sm cursor-pointer">
-                <option>Data Structures</option>
-                <option>Operating Systems</option>
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-[#667085] pointer-events-none" size={18} />
-            </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <label className="text-[13px] font-medium text-[#344054]">Select date</label>
-            <div className="relative">
-              <input 
-                type="text" 
-                defaultValue="11/05/2026"
-                className="w-full h-11 pl-4 pr-10 bg-white border border-[#d0d5dd] rounded-lg text-[14px] text-[#475467] focus:outline-none focus:border-[#9BA3F2] focus:ring-1 focus:ring-[#9BA3F2] shadow-sm"
-              />
-              <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 text-[#667085]" size={18} />
             </div>
           </div>
         </div>
@@ -327,37 +343,51 @@ export const AbsentReportingScreen: React.FC = () => {
                 <thead>
                   <tr className="bg-[#f9fafb] border-b border-[#e4e7ec]">
                     <th className="py-4 px-6 text-[12px] font-semibold text-[#667085] w-20">sr.no</th>
-                    <th className="py-4 px-6 text-[12px] font-semibold text-[#667085]">Student ID</th>
+                    <th className="py-4 px-6 text-[12px] font-semibold text-[#667085]">Student PRN</th>
                     <th className="py-4 px-6 text-[12px] font-semibold text-[#667085]">Student Name</th>
                     <th className="py-4 px-6 text-[12px] font-semibold text-[#667085]">Seat no</th>
                     <th className="py-4 px-6 text-[12px] font-semibold text-[#667085]">Attendance</th>
                     <th className="py-4 px-6 text-[12px] font-semibold text-[#667085]">Mark absent</th>
+                    <th className="py-4 px-6 text-[12px] font-semibold text-[#667085]">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#e4e7ec]">
                   {paginatedData.map((student, idx) => (
-                    <tr key={student.id} className="hover:bg-gray-50/50">
+                    <tr key={student.seating_id} className={`hover:bg-gray-50/50 ${!student.is_present ? 'bg-red-50/30' : ''}`}>
                       <td className="py-4 px-6 text-[14px] text-[#475467]">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
-                      <td className="py-4 px-6 text-[14px] text-[#475467]">{student.studentId}</td>
-                      <td className="py-4 px-6 text-[14px] text-[#475467]">{student.name}</td>
-                      <td className="py-4 px-6 text-[14px] text-[#475467]">{student.seatNo}</td>
+                      <td className="py-4 px-6 text-[14px] text-[#475467]">{student.PRN}</td>
+                      <td className="py-4 px-6 text-[14px] text-[#475467]">{student.student_name}</td>
+                      <td className="py-4 px-6 text-[14px] text-[#475467]">{student.seat_no}</td>
                       <td className="py-4 px-6">
                         <span className={`inline-flex items-center justify-center px-2.5 py-0.5 text-[12px] font-medium rounded-full ${
-                          student.isAbsent 
+                          !student.is_present 
                             ? 'bg-red-50 text-red-600 border border-red-200' 
                             : 'bg-green-50 text-green-600 border border-green-200'
                         }`}>
-                          {student.isAbsent ? 'Absent' : 'Present'}
+                          {!student.is_present ? 'Absent' : 'Present'}
                         </span>
                       </td>
                       <td className="py-4 px-6">
                         <div className="flex justify-center">
                           <input 
                             type="checkbox" 
-                            checked={student.isAbsent}
-                            onChange={() => handleToggleAbsent(student.id)}
+                            checked={!student.is_present}
+                            onChange={() => handleToggleAbsent(student.seating_id)}
                             className="w-4 h-4 text-[#0E1680] bg-white border-[#d0d5dd] rounded focus:ring-[#0E1680] cursor-pointer"
                           />
+                        </div>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="flex justify-center">
+                          <button
+                            onClick={() => {
+                              setCopyCaseStudent(student);
+                              setIsCopyCaseOpen(true);
+                            }}
+                            className="text-red-600 hover:text-red-700 font-medium text-[13px] underline underline-offset-2"
+                          >
+                            Report Malpractice
+                          </button>
                         </div>
                       </td>
                     </tr>
@@ -461,10 +491,7 @@ export const AbsentReportingScreen: React.FC = () => {
               </div>
               <div className="flex items-center gap-4 mt-4">
                 <button 
-                  onClick={() => {
-                    setIsSubmitConfirmOpen(false);
-                    setIsSubmitSuccessOpen(true);
-                  }} 
+                  onClick={handleSubmitAttendance} 
                   className="w-[120px] h-[44px] bg-[#0E1680] hover:bg-[#0b126c] flex items-center justify-center rounded-[8px] transition-colors cursor-pointer text-white font-semibold text-[16px]"
                 >
                   Confirm
@@ -503,6 +530,22 @@ export const AbsentReportingScreen: React.FC = () => {
             </div>
           </div>
         </div>
+      {/* ── COPY CASE MODAL ── */}
+      {copyCaseStudent && (
+        <CopyCaseModal 
+          isOpen={isCopyCaseOpen}
+          onClose={() => {
+            setIsCopyCaseOpen(false);
+            setCopyCaseStudent(null);
+          }}
+          studentPRN={copyCaseStudent.PRN}
+          studentName={copyCaseStudent.student_name}
+          seatingId={copyCaseStudent.seating_id}
+          onSubmitSuccess={() => {
+            setIsCopyCaseOpen(false);
+            setCopyCaseStudent(null);
+          }}
+        />
       )}
     </div>
   );

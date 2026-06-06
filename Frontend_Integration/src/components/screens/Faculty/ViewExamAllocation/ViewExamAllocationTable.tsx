@@ -1,37 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { axiosInstance } from '../../../../utils/axiosInstance';
+import type { SupervisorDutyView } from '../../../../types/Faculty/supervisorDuty';
 
 export const ViewExamAllocationTable: React.FC = () => {
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
-
-  const allTableData = [
-    { id: 1, room: '213', date: '20/05/26', session: '2:00 to 3:00 pm', subject: 'Automata Theory' },
-    { id: 2, room: '203', date: '20/05/26', session: '2:00 to 3:00 pm', subject: 'Networking' },
-    { id: 3, room: '312', date: '20/05/26', session: '2:00 to 3:00 pm', subject: 'Operating System' },
-    { id: 4, room: '101', date: '21/05/26', session: '10:00 to 11:00 am', subject: 'Database Management' },
-    { id: 5, room: '102', date: '21/05/26', session: '10:00 to 11:00 am', subject: 'Data Structures' },
-    { id: 6, room: '105', date: '22/05/26', session: '2:00 to 3:00 pm', subject: 'Machine Learning' },
-    { id: 7, room: '210', date: '22/05/26', session: '2:00 to 3:00 pm', subject: 'Artificial Intelligence' },
-    { id: 8, room: '304', date: '23/05/26', session: '9:00 to 10:00 am', subject: 'Computer Graphics' },
-    { id: 9, room: '305', date: '23/05/26', session: '9:00 to 10:00 am', subject: 'Compiler Design' },
-    { id: 10, room: '401', date: '24/05/26', session: '2:00 to 3:00 pm', subject: 'Software Engineering' },
-    { id: 11, room: '402', date: '24/05/26', session: '2:00 to 3:00 pm', subject: 'Cloud Computing' },
-  ];
+  const [allTableData, setAllTableData] = useState<SupervisorDutyView[]>([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const totalPages = Math.ceil(allTableData.length / itemsPerPage);
+  const totalPages = Math.ceil(allTableData.length / itemsPerPage) || 1;
   const paginatedData = allTableData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchAcceptedDuties = async () => {
+      try {
+        const response = await axiosInstance.get('/allocate/supervisors/faculty-duties');
+        if (response.data?.success && isMounted) {
+          const rawData = Array.isArray(response.data.data) ? response.data.data : [];
+          const accepted = rawData.filter((d: SupervisorDutyView) => d.duty_status === 'ACCEPTED');
+          setAllTableData(accepted);
+        }
+      } catch (error) {
+        if (isMounted) console.error('Error fetching accepted duties:', error);
+      }
+    };
+    fetchAcceptedDuties();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleExport = () => {
     const ws = XLSX.utils.json_to_sheet(allTableData.map(row => ({
-      'Room/Block No': row.room,
+      'Room/Block No': row.room_no,
       'Date': row.date,
-      'Exam Session': row.session,
-      'Subject': row.subject
+      'Exam Session': row.time,
+      'Subject': row.subject_name
     })));
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "ExamAllocation");
@@ -47,7 +56,7 @@ export const ViewExamAllocationTable: React.FC = () => {
     autoTable(doc, {
       startY: 30,
       head: [['Room/Block No', 'Date', 'Exam Session', 'Subject']],
-      body: allTableData.map(row => [row.room, row.date, row.session, row.subject]),
+      body: allTableData.map(row => [row.room_no, row.date, row.time, row.subject_name]),
       theme: 'grid',
       styles: { halign: 'center', cellPadding: 6 },
       headStyles: { fillColor: [249, 250, 251], textColor: [102, 112, 133], fontStyle: 'bold', lineWidth: 0.1, lineColor: [228, 231, 236] },
@@ -97,11 +106,11 @@ export const ViewExamAllocationTable: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-[#e4e7ec]">
               {paginatedData.map((row) => (
-                <tr key={row.id} className="hover:bg-gray-50/50">
-                  <td className="py-4 px-6 text-[14px] text-[#475467]">{row.room}</td>
+                <tr key={row.duty_id} className="hover:bg-gray-50/50">
+                  <td className="py-4 px-6 text-[14px] text-[#475467]">{row.room_no}</td>
                   <td className="py-4 px-6 text-[14px] text-[#475467]">{row.date}</td>
-                  <td className="py-4 px-6 text-[14px] text-[#475467]">{row.session}</td>
-                  <td className="py-4 px-6 text-[14px] text-[#475467]">{row.subject}</td>
+                  <td className="py-4 px-6 text-[14px] text-[#475467]">{row.time}</td>
+                  <td className="py-4 px-6 text-[14px] text-[#475467]">{row.subject_name}</td>
                 </tr>
               ))}
             </tbody>

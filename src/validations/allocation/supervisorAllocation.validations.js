@@ -1,13 +1,13 @@
 const { z } = require('zod');
 
-const DUTY_STATUSES = ['assigned', 'accepted', 'rejected', 'completed'];
+const DUTY_STATUSES = ['PENDING', 'ACCEPTED', 'CONFLICT', 'COMPLETED'];
 
 const createDutySchema = z.object({
   timetable_id: z.string().uuid().optional(),
   room_id: z.string().uuid().optional(),
   faculty_id: z.string().uuid(),
-  duty_status: z.enum(DUTY_STATUSES).default('assigned'),
-  remarks: z.string().max(1000).optional(),
+  duty_status: z.enum(DUTY_STATUSES).default('PENDING'),
+  conflict_reason: z.string().max(1000).optional(),
 });
 
 const updateDutySchema = createDutySchema.partial();
@@ -18,7 +18,12 @@ const dutyIdSchema = z.object({
 
 const rejectDutySchema = z.object({
   duty_id: z.string().uuid(),
-  remarks: z.string().max(1000).optional(),
+  conflict_reason: z.string().max(1000).optional(),
+});
+
+const updateDutyStatusSchema = z.object({
+  status: z.enum(['ACCEPTED', 'CONFLICT']),
+  conflict_reason: z.string().max(1000).optional(),
 });
 
 const dutyQuerySchema = z.object({
@@ -35,5 +40,6 @@ module.exports = {
   updateDutySchema,
   dutyIdSchema,
   rejectDutySchema,
+  updateDutyStatusSchema,
   dutyQuerySchema,
 };
