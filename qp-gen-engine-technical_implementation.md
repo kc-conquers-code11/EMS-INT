@@ -43,3 +43,4 @@ Faculty Submit: Faculty clicks "Lock & Submit". The frontend shifts to an immuta
 COE Review: The COE views the parsed JSON in a clean typography layout.
 Rejection Loop: If rejected, the COE inputs a rejection_reason (persisted in SQL), the status reverts to DRAFT, and the Faculty dashboard displays a prominent red alert banner for corrections. If approved, the status is locked to APPROVED.
 
+<!-- KC - 6th june 2026 -->

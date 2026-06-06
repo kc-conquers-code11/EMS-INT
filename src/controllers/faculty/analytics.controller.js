@@ -8,7 +8,13 @@ const getMarksheetVerification = async (req, res) => {
       SELECT 
         s.stud_clg_id AS prn,
         spd.name AS student_name,
-        COALESCE(SUM(me.marks_obtained), 0) AS aggregated_marks,
+        COALESCE(SUM(
+          CASE 
+            WHEN re.is_locked = 1 AND re.revised_marks IS NOT NULL 
+            THEN GREATEST(me.marks_obtained, re.revised_marks)
+            ELSE me.marks_obtained 
+          END
+        ), 0) AS aggregated_marks,
         COALESCE(SUM(me.max_marks), 0) AS total_max_marks,
         MAX(cc.case_id) AS ufm_case_id,
         MAX(cc.punishment_reason) AS ufm_penalty
@@ -17,6 +23,7 @@ const getMarksheetVerification = async (req, res) => {
       JOIN students s ON er.sid = s.sid
       JOIN student_personaldetails spd ON s.sid = spd.stud_id
       LEFT JOIN marks_entry me ON rs.reg_subj_id = me.reg_subj_id
+      LEFT JOIN revaluation_entry re ON me.reg_subj_id = re.reg_subj_id AND me.component = re.component
       LEFT JOIN timetable tt ON rs.mapping_id = tt.mapping_id
       LEFT JOIN copy_case cc ON s.sid = cc.sid AND cc.timetable_id = tt.timetable_id AND cc.case_status = 'RESOLVED'
       WHERE rs.mapping_id = :mapping_id
@@ -69,12 +76,19 @@ const getCOPOAttainment = async (req, res) => {
     const marksQuery = `
       SELECT 
         s.sid,
-        COALESCE(SUM(me.marks_obtained), 0) AS aggregated_marks,
+        COALESCE(SUM(
+          CASE 
+            WHEN re.is_locked = 1 AND re.revised_marks IS NOT NULL 
+            THEN GREATEST(me.marks_obtained, re.revised_marks)
+            ELSE me.marks_obtained 
+          END
+        ), 0) AS aggregated_marks,
         COALESCE(SUM(me.max_marks), 0) AS total_max_marks
       FROM registration_subject rs
       JOIN exam_registration er ON rs.exam_reg_id = er.exam_reg_id
       JOIN students s ON er.sid = s.sid
       LEFT JOIN marks_entry me ON rs.reg_subj_id = me.reg_subj_id
+      LEFT JOIN revaluation_entry re ON me.reg_subj_id = re.reg_subj_id AND me.component = re.component
       LEFT JOIN timetable tt ON rs.mapping_id = tt.mapping_id
       LEFT JOIN copy_case cc ON s.sid = cc.sid AND cc.timetable_id = tt.timetable_id AND cc.case_status = 'RESOLVED'
       WHERE rs.mapping_id = :mapping_id AND cc.case_id IS NULL
