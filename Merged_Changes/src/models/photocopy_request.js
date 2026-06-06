@@ -1,0 +1,49 @@
+const Sequelize = require('sequelize');
+module.exports = function (sequelize, DataTypes) {
+  return sequelize.define(
+    'photocopy_request',
+    {
+      req_id: {
+        autoIncrement: true,
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+      },
+      result_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      sid: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
+      req_status: {
+        type: DataTypes.STRING(30),
+        allowNull: true,
+        defaultValue: 'pending',
+      },
+      fee_paid: {
+        type: DataTypes.DECIMAL(8, 2),
+        allowNull: true,
+      },
+      requested_at: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
+      },
+    },
+    {
+      sequelize,
+      tableName: 'photocopy_request',
+      timestamps: true,
+      indexes: [
+        {
+          name: 'PRIMARY',
+          unique: true,
+          using: 'BTREE',
+          fields: [{ name: 'req_id' }],
+        },
+      ],
+    }
+  );
+};

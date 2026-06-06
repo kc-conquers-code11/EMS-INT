@@ -1,0 +1,1198 @@
+{
+  "info": {
+    "_postman_id": "fe3348b5-2043-4de7-b2b8-a8ed2696a369",
+    "name": "EMS Payment API",
+    "description": "Postman collection for Razorpay Payment Workflow in EMS",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54478752",
+    "_collection_link": "https://go.postman.co/collection/54478752-fe3348b5-2043-4de7-b2b8-a8ed2696a369?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Create Order",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"exam_reg_id\": \"e5bc7d00-410a-41d1-817c-a111b1574cc1\",\n  \"amount\": 2000,\n  \"currency\": \"INR\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}payment/create-order",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "payment",
+            "create-order"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Order",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"exam_reg_id\": \"e5bc7d00-410a-41d1-817c-a111b1574cc1\",\n  \"amount\": 2000,\n  \"currency\": \"INR\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}payment/create-order",
+              "host": [
+                "{{base_url}}payment"
+              ],
+              "path": [
+                "create-order"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "http://localhost:5173/api/v1/"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "248"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"f8-8h/uRXuQx2D3wjKh7FWjn378NMo\""
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 28 May 2026 19:54:05 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"id\": \"order_SuuH0Hfv8ycWsw\",\n        \"amount\": 200000,\n        \"currency\": \"INR\",\n        \"receipt\": \"EXAM_e5bc7d00_1779998045341\",\n        \"txn_id\": \"ebdb39d2-ad57-44c2-89ab-af31fc33d402\",\n        \"key_id\": \"rzp_test_JLwLrxZ3lb1S9O\"\n    },\n    \"message\": \"Order created successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Verify Payment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"razorpay_order_id\": \"order_abc123\",\n  \"razorpay_payment_id\": \"pay_xyz789\",\n  \"razorpay_signature\": \"generated_signature\",\n  \"exam_reg_id\": \"e5bc7d00-410a-41d1-817c-a111b1574cc1\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}payment/verify-payment",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "payment",
+            "verify-payment"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Verify Payment",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"razorpay_order_id\": \"order_SuuH0Hfv8ycWsw\",\n  \"razorpay_payment_id\": \"pay_SK1R85zJp1L8hC\",\n  \"razorpay_signature\": \"5fe7bcf77a38c672ebb54c682e3b5f98fef28fb5f486e7cf9cc94336f6ca41d0\",\n  \"exam_reg_id\": \"e5bc7d00-410a-41d1-817c-a111b1574cc1\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}payment/verify-payment",
+              "host": [
+                "{{base_url}}payment"
+              ],
+              "path": [
+                "verify-payment"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "http://localhost:5173"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "786"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"312-9ppfS8abzXuSckgbPBbtXZYUjc8\""
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 28 May 2026 20:06:03 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"transaction\": {\n            \"txn_id\": \"ebdb39d2-ad57-44c2-89ab-af31fc33d402\",\n            \"exam_reg_id\": \"e5bc7d00-410a-41d1-817c-a111b1574cc1\",\n            \"amount\": \"2000.00\",\n            \"payment_mode\": \"razorpay\",\n            \"txn_reference\": null,\n            \"txn_status\": \"success\",\n            \"razorpay_order_id\": \"order_SuuH0Hfv8ycWsw\",\n            \"razorpay_payment_id\": \"pay_SK1R85zJp1L8hC\",\n            \"razorpay_signature\": \"5fe7bcf77a38c672ebb54c682e3b5f98fef28fb5f486e7cf9cc94336f6ca41d0\",\n            \"paid_at\": \"2026-05-29T01:36:03.000Z\",\n            \"createdAt\": \"2026-05-29T01:24:05.000Z\",\n            \"updatedAt\": \"2026-05-29T01:36:03.000Z\",\n            \"deletedAt\": null,\n            \"sid\": \"57ba62ff-3e61-4384-b940-4dfdd92da14e\",\n            \"event_id\": \"0f1827a9-4756-4847-aec7-b8e970a070a5\",\n            \"event_name\": \"Final Term Jury Presentation\"\n        },\n        \"payment_id\": \"pay_SK1R85zJp1L8hC\",\n        \"order_id\": \"order_SuuH0Hfv8ycWsw\"\n    },\n    \"message\": \"Payment verified successfully\"\n}"
+        },
+        {
+          "name": "Verify Payment",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"razorpay_payment_id\": \"pay_SuulI9wNhOlFtQ\",\n    \"razorpay_order_id\": \"order_SuuH0Hfv8ycWsw\",\n    \"razorpay_signature\": \"1f4610071fd71d5fd7c6aed0e2c9710a49a104ec68ff5dfa8fd463a85efb0b5e\",\n    \"exam_reg_id\": \"e5bc7d00-410a-41d1-817c-a111b1574cc1\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}payment/verify-payment",
+              "host": [
+                "{{base_url}}payment"
+              ],
+              "path": [
+                "verify-payment"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "http://localhost:5173"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "786"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"312-PMcOah/RZP6evPIGry7mvQEPWEA\""
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 28 May 2026 20:23:36 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"transaction\": {\n            \"txn_id\": \"ebdb39d2-ad57-44c2-89ab-af31fc33d402\",\n            \"exam_reg_id\": \"e5bc7d00-410a-41d1-817c-a111b1574cc1\",\n            \"amount\": \"2000.00\",\n            \"payment_mode\": \"razorpay\",\n            \"txn_reference\": null,\n            \"txn_status\": \"success\",\n            \"razorpay_order_id\": \"order_SuuH0Hfv8ycWsw\",\n            \"razorpay_payment_id\": \"pay_SuulI9wNhOlFtQ\",\n            \"razorpay_signature\": \"1f4610071fd71d5fd7c6aed0e2c9710a49a104ec68ff5dfa8fd463a85efb0b5e\",\n            \"paid_at\": \"2026-05-29T01:53:36.000Z\",\n            \"createdAt\": \"2026-05-29T01:24:05.000Z\",\n            \"updatedAt\": \"2026-05-29T01:53:36.000Z\",\n            \"deletedAt\": null,\n            \"sid\": \"57ba62ff-3e61-4384-b940-4dfdd92da14e\",\n            \"event_id\": \"0f1827a9-4756-4847-aec7-b8e970a070a5\",\n            \"event_name\": \"Final Term Jury Presentation\"\n        },\n        \"payment_id\": \"pay_SuulI9wNhOlFtQ\",\n        \"order_id\": \"order_SuuH0Hfv8ycWsw\"\n    },\n    \"message\": \"Payment verified successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Payment Status",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}payment/status/{{txn_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "payment",
+            "status",
+            "{{txn_id}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Payment Status",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}payment/status/{{txn_id}}",
+              "host": [
+                "{{base_url}}payment"
+              ],
+              "path": [
+                "status",
+                "{{txn_id}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "http://localhost:5173"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "612"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"264-M4s8h5aULHrw397EVnTIa5sLkic\""
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 28 May 2026 19:59:03 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"txn_id\": \"ebdb39d2-ad57-44c2-89ab-af31fc33d402\",\n        \"exam_reg_id\": \"e5bc7d00-410a-41d1-817c-a111b1574cc1\",\n        \"amount\": \"2000.00\",\n        \"payment_mode\": \"razorpay\",\n        \"txn_reference\": null,\n        \"txn_status\": \"initiated\",\n        \"razorpay_order_id\": \"order_SuuH0Hfv8ycWsw\",\n        \"razorpay_payment_id\": null,\n        \"razorpay_signature\": null,\n        \"paid_at\": null,\n        \"createdAt\": \"2026-05-29T01:24:05.000Z\",\n        \"updatedAt\": \"2026-05-29T01:24:05.000Z\",\n        \"deletedAt\": null,\n        \"sid\": \"57ba62ff-3e61-4384-b940-4dfdd92da14e\",\n        \"event_id\": \"0f1827a9-4756-4847-aec7-b8e970a070a5\",\n        \"event_name\": \"Final Term Jury Presentation\"\n    },\n    \"message\": \"Payment status retrieved successfully\"\n}"
+        },
+        {
+          "name": "Get Payment Status",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}payment/status/{{txn_id}}",
+              "host": [
+                "{{base_url}}payment"
+              ],
+              "path": [
+                "status",
+                "{{txn_id}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "http://localhost:5173"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "710"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"2c6-RSg8JBkP+6BD2xtjKroJqO2UZE8\""
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 28 May 2026 20:06:46 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"txn_id\": \"ebdb39d2-ad57-44c2-89ab-af31fc33d402\",\n        \"exam_reg_id\": \"e5bc7d00-410a-41d1-817c-a111b1574cc1\",\n        \"amount\": \"2000.00\",\n        \"payment_mode\": \"razorpay\",\n        \"txn_reference\": null,\n        \"txn_status\": \"success\",\n        \"razorpay_order_id\": \"order_SuuH0Hfv8ycWsw\",\n        \"razorpay_payment_id\": \"pay_SK1R85zJp1L8hC\",\n        \"razorpay_signature\": \"5fe7bcf77a38c672ebb54c682e3b5f98fef28fb5f486e7cf9cc94336f6ca41d0\",\n        \"paid_at\": \"2026-05-29T01:36:03.000Z\",\n        \"createdAt\": \"2026-05-29T01:24:05.000Z\",\n        \"updatedAt\": \"2026-05-29T01:36:03.000Z\",\n        \"deletedAt\": null,\n        \"sid\": \"57ba62ff-3e61-4384-b940-4dfdd92da14e\",\n        \"event_id\": \"0f1827a9-4756-4847-aec7-b8e970a070a5\",\n        \"event_name\": \"Final Term Jury Presentation\"\n    },\n    \"message\": \"Payment status retrieved successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Student Payment History",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}payment/student/{{sid}}/history?page=1&limit=10",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "payment",
+            "student",
+            "{{sid}}",
+            "history"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Student Payment History",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}payment/student/{{sid}}/history?page=1&limit=10",
+              "host": [
+                "{{base_url}}payment"
+              ],
+              "path": [
+                "student",
+                "{{sid}}",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "http://localhost:5173"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "111"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"6f-ELgsi6EdWDEGHEDmuuPoWPipyBA\""
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 28 May 2026 19:59:40 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"total\": 0,\n    \"page\": 1,\n    \"totalPages\": 0,\n    \"data\": [],\n    \"message\": \"Payment history retrieved successfully\"\n}"
+        },
+        {
+          "name": "Get Student Payment History",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}payment/student/{{sid}}/history?page=1&limit=10",
+              "host": [
+                "{{base_url}}payment"
+              ],
+              "path": [
+                "student",
+                "{{sid}}",
+                "history"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "http://localhost:5173"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "724"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"2d4-BTiZ3G+JNN98aFGdnr/ha383MA4\""
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 28 May 2026 20:07:16 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"total\": 1,\n    \"page\": 1,\n    \"totalPages\": 1,\n    \"data\": [\n        {\n            \"txn_id\": \"ebdb39d2-ad57-44c2-89ab-af31fc33d402\",\n            \"exam_reg_id\": \"e5bc7d00-410a-41d1-817c-a111b1574cc1\",\n            \"amount\": \"2000.00\",\n            \"payment_mode\": \"razorpay\",\n            \"txn_reference\": null,\n            \"txn_status\": \"success\",\n            \"razorpay_order_id\": \"order_SuuH0Hfv8ycWsw\",\n            \"razorpay_payment_id\": \"pay_SK1R85zJp1L8hC\",\n            \"razorpay_signature\": \"5fe7bcf77a38c672ebb54c682e3b5f98fef28fb5f486e7cf9cc94336f6ca41d0\",\n            \"paid_at\": \"2026-05-29T01:36:03.000Z\",\n            \"createdAt\": \"2026-05-29T01:24:05.000Z\",\n            \"updatedAt\": \"2026-05-29T01:36:03.000Z\",\n            \"deletedAt\": null,\n            \"event_id\": \"0f1827a9-4756-4847-aec7-b8e970a070a5\",\n            \"event_name\": \"Final Term Jury Presentation\",\n            \"exam_type\": \"regular\"\n        }\n    ],\n    \"message\": \"Payment history retrieved successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Transaction by Order ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}payment/order/{{order_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "api",
+            "payment",
+            "order",
+            "{{order_id}}"
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Get Transaction by Order ID",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}payment/order/{{order_id}}",
+              "host": [
+                "{{base_url}}payment"
+              ],
+              "path": [
+                "order",
+                "{{order_id}}"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=31536000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "http://localhost:5173"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "609"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"261-MfF/lKdnKgN8gGKkSju0pHm2798\""
+            },
+            {
+              "key": "Date",
+              "value": "Thu, 28 May 2026 20:01:11 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"data\": {\n        \"txn_id\": \"ebdb39d2-ad57-44c2-89ab-af31fc33d402\",\n        \"exam_reg_id\": \"e5bc7d00-410a-41d1-817c-a111b1574cc1\",\n        \"amount\": \"2000.00\",\n        \"payment_mode\": \"razorpay\",\n        \"txn_reference\": null,\n        \"txn_status\": \"initiated\",\n        \"razorpay_order_id\": \"order_SuuH0Hfv8ycWsw\",\n        \"razorpay_payment_id\": null,\n        \"razorpay_signature\": null,\n        \"paid_at\": null,\n        \"createdAt\": \"2026-05-29T01:24:05.000Z\",\n        \"updatedAt\": \"2026-05-29T01:24:05.000Z\",\n        \"deletedAt\": null,\n        \"sid\": \"57ba62ff-3e61-4384-b940-4dfdd92da14e\",\n        \"event_id\": \"0f1827a9-4756-4847-aec7-b8e970a070a5\",\n        \"event_name\": \"Final Term Jury Presentation\"\n    },\n    \"message\": \"Transaction retrieved successfully\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Detailed Payment History",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/payment/history/{{sid}}?page=1&limit=10&status=success",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "payment",
+            "history",
+            "{{sid}}"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            },
+            {
+              "key": "status",
+              "value": "success"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Download Fee Receipt",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/payment/receipt/{{txn_id}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "payment",
+            "receipt",
+            "{{txn_id}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000/api/v1/"
+    },
+    {
+      "key": "token",
+      "value": "YOUR_JWT_TOKEN"
+    },
+    {
+      "key": "txn_id",
+      "value": "b0fbb48c-7956-444f-a9db-8dcf8c04eab2"
+    },
+    {
+      "key": "sid",
+      "value": "57ba62ff-3e61-4384-b940-4dfdd92da14e"
+    },
+    {
+      "key": "order_id",
+      "value": "order_xyz"
+    }
+  ]
+}
