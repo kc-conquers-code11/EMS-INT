@@ -132,7 +132,7 @@ export default function StudentLayout() {
           <NavItem to="/student/hall-ticket" icon={FileText} label="Access Hall Ticket" />
           <NavItem to="/student/view-result" icon={Search} label="View Result" />
           <NavItem to="/student/photocopy" icon={Copy} label="Photocopy" />
-          <NavItem to="/student/revaluation" icon={RefreshCw} label="Revaluation" />
+          <NavItem to="/student/revaluation-application" icon={RefreshCw} label="Revaluation Application" />
           <NavItem to="/student/reassessment" icon={RefreshCw} label="Reassessment" />
           <NavItem to="/student/fees" icon={IndianRupee} label="Fees Management" />
           </nav>

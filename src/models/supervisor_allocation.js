@@ -24,7 +24,7 @@ module.exports = function (sequelize, DataTypes) {
       duty_status: {
         type: DataTypes.STRING(30),
         allowNull: true,
-        defaultValue: 'assigned',
+        defaultValue: 'PENDING',
       },
       assigned_at: {
         type: DataTypes.DATE,
@@ -35,7 +35,7 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.DATE,
         allowNull: true,
       },
-      remarks: {
+      conflict_reason: {
         type: DataTypes.TEXT,
         allowNull: true,
       },

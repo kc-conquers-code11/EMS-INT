@@ -124,8 +124,8 @@ const acceptDuty = async (req, res) => {
 const rejectDuty = async (req, res) => {
   try {
     const { duty_id } = req.params;
-    const { remarks } = req.body;
-    const result = await supervisorAllocationService.rejectDuty(duty_id, remarks);
+    const { conflict_reason } = req.body;
+    const result = await supervisorAllocationService.rejectDuty(duty_id, conflict_reason);
     return res.status(200).json({ success: true, data: result, message: 'Duty rejected' });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -146,6 +146,40 @@ const rejectDuty = async (req, res) => {
   }
 };
 
+const getFacultyDuties = async (req, res) => {
+  try {
+    // Attempt to extract faculty identifier. Typically it's user_id or faculty_id.
+    const faculty_id = req.user?.faculty_id || req.user?.id || req.user?.user_id || req.query.faculty_id;
+    if (!faculty_id) {
+      return res.status(401).json({ success: false, message: 'Unauthorized: Faculty ID not found' });
+    }
+    const result = await supervisorAllocationService.getFacultyDuties(faculty_id);
+    return res.status(200).json({ success: true, data: result, message: 'Faculty duties retrieved successfully' });
+  } catch (error) {
+    console.error('Error in getFacultyDuties:', error);
+    return res.status(500).json({
+      success: false, message: 'Internal server error', error: error.message
+    });
+  }
+};
+
+const updateDutyStatus = async (req, res) => {
+  try {
+    const { duty_id } = req.params;
+    const { status, conflict_reason } = req.body;
+    const result = await supervisorAllocationService.updateDutyStatus(duty_id, status, conflict_reason);
+    return res.status(200).json({ success: true, data: result, message: 'Duty status updated successfully' });
+  } catch (error) {
+    if (error.status === 404) {
+      return res.status(404).json({ success: false, message: error.message });
+    }
+    console.error('Error in updateDutyStatus:', error);
+    return res.status(500).json({
+      success: false, message: 'Internal server error', error: error.message
+    });
+  }
+};
+
 module.exports = {
   createDuty,
   getAllDuties,
@@ -154,4 +188,6 @@ module.exports = {
   deleteDuty,
   acceptDuty,
   rejectDuty,
+  getFacultyDuties,
+  updateDutyStatus,
 };

@@ -5,6 +5,13 @@ import { PrivateRoute } from './routes/PrivateRoute';
 import { PublicRoute } from './routes/PublicRoute';
 import { StudentRoute } from './routes/StudentRoute';
 import { FacultyRoute } from './routes/FacultyRoute';
+import { CopyCaseProcessRecords } from './pages/COE/CopyCaseProcessRecords';
+import { CoeRevalAssignment } from './pages/COE/CoeRevalAssignment';
+
+// Student Pages
+import { StudentRevalApplication } from './pages/Student/StudentRevalApplication';
+
+
 import { HodRoute } from './routes/HodRoute';
 import { AdminLayout } from './components/layout/admin_layout';
 import { COELayout } from './components/layout/coe_layout';
@@ -74,6 +81,8 @@ import CourseOutcomes from './pages/Faculty/CourseOutcomes';
 import CoPoMapping from './pages/Faculty/CoPoMapping';
 import PaperRequestsDashboard from './pages/Faculty/PaperRequestsDashboard';
 import QPBuilderLayout from './pages/Faculty/QPBuilder/QPBuilderLayout';
+import { MarksheetVerificationPage } from './pages/Faculty/Analytics/MarksheetVerificationPage';
+import { COPOAttainmentReport } from './pages/Faculty/Analytics/COPOAttainmentReport';
 
 function App() {
   return (
@@ -125,6 +134,8 @@ function App() {
           <Route path="/paper-request-trigger" element={<PaperRequestTrigger />} />
           <Route path="/review-qp/:set_id" element={<ReviewQP />} />
           <Route path="/print-qp/:set_id" element={<PrintQP />} />
+          <Route path="/reval-assignment" element={<CoeRevalAssignment />} />
+          <Route path="/copy-case" element={<CopyCaseProcessRecords />} />
         </Route>
       </Route>
 
@@ -136,6 +147,7 @@ function App() {
           <Route path="/student/fees" element={<FeesManagementPage />} />
           <Route path="/student/backlog-exam" element={<BacklogRegistrationPage />} />
           <Route path="/student/exam-registration" element={<ExamRegistrationPage />} />
+          <Route path="/student/revaluation-application" element={<StudentRevalApplication />} />
         </Route>
       </Route>
 
@@ -163,6 +175,8 @@ function App() {
           <Route path="/faculty/co-po-mapping" element={<CoPoMapping />} />
           <Route path="/faculty/paper-requests" element={<PaperRequestsDashboard />} />
           <Route path="/faculty/qp-builder/:set_id" element={<QPBuilderLayout />} />
+          <Route path="/faculty/marksheet-verification/:mapping_id" element={<MarksheetVerificationPage />} />
+          <Route path="/faculty/copo-attainment/:mapping_id" element={<COPOAttainmentReport />} />
         </Route>
       </Route>
 

@@ -35,7 +35,15 @@ const facultySubjectMappingRoutes = require('./routes/programme/facultySubjectMa
 const hallTicketRoutes = require('./routes/hall_ticket/hallTicket.route.js');
 
 const allocationRoutes = require('./routes/allocation/allocation.route');
+const examExecutionRoutes = require('./routes/faculty/examExecution.route.js');
+const marksEntryRoutes = require('./routes/faculty/marksEntry.route.js');
+const revaluationRoutes = require('./routes/faculty/revaluation.route.js');
+const analyticsRoutes = require('./routes/faculty/analytics.route.js');
+const hodApprovalRoutes = require('./routes/hod/hodApproval.route.js');
+const copyCaseProcessRoutes = require('./routes/coe/copyCaseProcess.route.js');
 
+const studentRevalRoutes = require('./routes/student/reval.route.js');
+const coeRevalAssignmentRoutes = require('./routes/coe/revalAssignment.route.js');
 const paperSetRoutes = require('./routes/exam/paperSet.route.js');
 
 const programmeOutcomeRoutes = require('./routes/masterRoutes/programmeOutcome.routes.js');
@@ -47,7 +55,7 @@ const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    origin: true,
     credentials: true,
   })
 );
@@ -111,7 +119,14 @@ app.use('/api/v1/co-po-mappings', coPoMappingRoutes);
 app.use('/api/v1/hall-ticket', hallTicketRoutes);
 
 app.use('/api/v1/allocate', allocationRoutes);
-
+app.use('/api/v1/faculty/exam-execution', examExecutionRoutes);
+app.use('/api/v1/faculty/marks-entry', marksEntryRoutes);
+app.use('/api/v1/faculty/revaluation', revaluationRoutes);
+app.use('/api/v1/faculty/analytics', analyticsRoutes);
+app.use('/api/v1/hod/approval', hodApprovalRoutes);
+app.use('/api/v1/coe/copy-case', copyCaseProcessRoutes);
+app.use('/api/v1/student/revaluation', studentRevalRoutes);
+app.use('/api/v1/coe/reval-assignment', coeRevalAssignmentRoutes);
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });

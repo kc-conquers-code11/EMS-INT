@@ -203,7 +203,8 @@ export const COELayout = () => {
             <NavItem to="/unlock-marksheet"     icon={Monitor} label="Unlock Marksheet" />
             <NavItem to="/exam-fees"            icon={Monitor} label="Exam Fees mapping" />
             <NavItem to="/approval-request"     icon={Monitor} label="Approval Request" />
-
+            <NavItem to="/reval-assignment"     icon={Users}   label="Reval Assignment" />
+            <NavItem to="/copy-case"            icon={Users}   label="Copy Case Processing" />
             {/* Divider */}
             <div className="h-px bg-gray-100 my-2" />
 

@@ -1,31 +1,27 @@
 const Sequelize = require('sequelize');
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
-    'marks_entry',
+    'revaluation_entry',
     {
-      entry_id: {
+      reval_id: {
         autoIncrement: true,
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
       },
       reg_subj_id: {
-        type: DataTypes.UUID,
-        allowNull: true,
-      },
-      faculty_id: {
-        type: DataTypes.UUID,
-        allowNull: true,
+        type: DataTypes.CHAR(36),
+        allowNull: false,
       },
       component: {
         type: DataTypes.STRING(30),
-        allowNull: true,
+        allowNull: false,
       },
-      marks_obtained: {
-        type: DataTypes.DECIMAL(6, 2),
-        allowNull: true,
+      faculty_id: {
+        type: DataTypes.CHAR(36),
+        allowNull: false,
       },
-      max_marks: {
+      revised_marks: {
         type: DataTypes.DECIMAL(6, 2),
         allowNull: true,
       },
@@ -38,37 +34,24 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.DATE,
         allowNull: true,
       },
-      locked_by: {
-        type: DataTypes.UUID,
-        allowNull: true,
-      },
-      is_approved: {
-        type: DataTypes.BOOLEAN,
-        allowNull: true,
-        defaultValue: 0,
-      },
-      approved_by: {
-        type: DataTypes.UUID,
-        allowNull: true,
-      },
-      approved_at: {
-        type: DataTypes.DATE,
+      evaluation_remarks: {
+        type: DataTypes.TEXT,
         allowNull: true,
       },
     },
     {
       sequelize,
-      tableName: 'marks_entry',
+      tableName: 'revaluation_entry',
       timestamps: true,
       indexes: [
         {
           name: 'PRIMARY',
           unique: true,
           using: 'BTREE',
-          fields: [{ name: 'entry_id' }],
+          fields: [{ name: 'reval_id' }],
         },
         {
-          name: 'uq_regsubj_component',
+          name: 'uq_reval_regsubj_comp',
           unique: true,
           using: 'BTREE',
           fields: [{ name: 'reg_subj_id' }, { name: 'component' }],

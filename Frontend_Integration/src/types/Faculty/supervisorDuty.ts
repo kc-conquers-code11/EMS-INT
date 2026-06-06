@@ -13,6 +13,8 @@
  *    - remarks
  */
 
+
+
 // ── Matches `supervisor_allocation` table ──────────────────────
 export interface SupervisorAllocation {
   duty_id: number;
@@ -22,14 +24,14 @@ export interface SupervisorAllocation {
   duty_status: SupervisorDutyStatus;
   assigned_at?: string; // ISO datetime
   accepted_at?: string; // ISO datetime
-  remarks?: string;
+  conflict_reason?: string;
 }
 
 // ── Status union type ──────────────────────────────────────────
 export type SupervisorDutyStatus = 
-  | 'Pending' 
-  | 'Accepted' 
-  | 'Conflict' 
+  | 'PENDING' 
+  | 'ACCEPTED' 
+  | 'CONFLICT' 
   | 'Hold';
 
 // ── Extended interface for Frontend UI Display ─────────────────
