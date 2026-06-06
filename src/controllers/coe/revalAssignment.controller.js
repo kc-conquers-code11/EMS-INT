@@ -14,7 +14,8 @@ exports.getApplications = async (req, res) => {
         sub.subject_name
       FROM reval_application ra
       JOIN registration_subject rs ON ra.subject_mapping_id = rs.reg_subj_id
-      JOIN subject sub ON rs.subject_id = sub.subject_id
+      JOIN semester_subject_mapping ssm ON rs.mapping_id = ssm.mapping_id
+      JOIN subject sub ON ssm.subject_id = sub.subject_id
       ORDER BY ra.createdAt DESC
     `;
     
@@ -24,7 +25,7 @@ exports.getApplications = async (req, res) => {
 
     // Also fetch active faculties to populate the dropdown
     const faculties = await db.faculty.findAll({
-      attributes: ['faculty_id', 'faculty_name', 'email'],
+      attributes: ['faculty_id', 'name', 'email'],
       where: { status: 1 }
     });
 

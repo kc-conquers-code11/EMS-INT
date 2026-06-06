@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Users, AlertCircle, CheckCircle, Send } from 'lucide-react';
-import { axiosInstance } from '../../../utils/axiosInstance';
+import { axiosInstance } from '../../utils/axiosInstance';
 
 interface Faculty {
   faculty_id: string;
-  faculty_name: string;
+  name: string;
   email: string;
 }
 
@@ -147,7 +147,7 @@ export const CoeRevalAssignment: React.FC = () => {
                               <option value="">-- Select Faculty --</option>
                               {faculties.map(f => (
                                 <option key={f.faculty_id} value={f.faculty_id}>
-                                  {f.faculty_name}
+                                  {f.name}
                                 </option>
                               ))}
                             </select>

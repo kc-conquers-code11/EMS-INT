@@ -64,7 +64,8 @@ exports.getEligibleSubjects = async (req, res) => {
       FROM exam_registration er
       JOIN registration_subject rs ON er.exam_reg_id = rs.exam_reg_id
       JOIN marks_entry me ON rs.reg_subj_id = me.reg_subj_id
-      JOIN subject sub ON rs.subject_id = sub.subject_id
+      JOIN semester_subject_mapping ssm ON rs.mapping_id = ssm.mapping_id
+      JOIN subject sub ON ssm.subject_id = sub.subject_id
       WHERE er.sid = :student_id AND me.is_locked = 1
     `;
 

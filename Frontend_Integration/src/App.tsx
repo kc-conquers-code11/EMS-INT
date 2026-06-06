@@ -5,13 +5,13 @@ import { PrivateRoute } from './routes/PrivateRoute';
 import { PublicRoute } from './routes/PublicRoute';
 import { StudentRoute } from './routes/StudentRoute';
 import { FacultyRoute } from './routes/FacultyRoute';
-import { CopyCaseProcess } from './pages/COE/CopyCaseProcess';
+import { CopyCaseProcessRecords } from './pages/COE/CopyCaseProcessRecords';
 import { CoeRevalAssignment } from './pages/COE/CoeRevalAssignment';
 
 // Student Pages
 import { StudentRevalApplication } from './pages/Student/StudentRevalApplication';
 
-import RegistrationLayout from './components/layout/registration_layout';
+
 import { HodRoute } from './routes/HodRoute';
 import { AdminLayout } from './components/layout/admin_layout';
 import { COELayout } from './components/layout/coe_layout';
@@ -135,6 +135,7 @@ function App() {
           <Route path="/review-qp/:set_id" element={<ReviewQP />} />
           <Route path="/print-qp/:set_id" element={<PrintQP />} />
           <Route path="/reval-assignment" element={<CoeRevalAssignment />} />
+          <Route path="/copy-case" element={<CopyCaseProcessRecords />} />
         </Route>
       </Route>
 

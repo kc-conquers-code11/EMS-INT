@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, CheckCircle, AlertCircle } from 'lucide-react';
-import { axiosInstance } from '../../../utils/axiosInstance';
+import { axiosInstance } from '../../utils/axiosInstance';
 
 interface EligibleSubject {
   subject_mapping_id: string;
