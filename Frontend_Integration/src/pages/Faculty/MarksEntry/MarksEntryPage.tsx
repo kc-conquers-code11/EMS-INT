@@ -228,7 +228,25 @@ export const MarksEntryPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-between items-center mt-2">
+          <div className="flex gap-3">
+            {selectedSubjectId && (
+              <>
+                <button 
+                  onClick={() => window.open(`/faculty/marksheet-verification/${selectedSubjectId}`, '_blank')}
+                  className="px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 text-sm font-semibold rounded-lg shadow-sm transition-colors cursor-pointer flex items-center gap-2"
+                >
+                  <AlertTriangle size={16} /> Verify Marksheet
+                </button>
+                <button 
+                  onClick={() => window.open(`/faculty/copo-attainment/${selectedSubjectId}`, '_blank')}
+                  className="px-4 py-2 bg-emerald-100 hover:bg-emerald-200 text-emerald-700 text-sm font-semibold rounded-lg shadow-sm transition-colors cursor-pointer flex items-center gap-2"
+                >
+                  <AlertTriangle size={16} /> CO-PO Attainment
+                </button>
+              </>
+            )}
+          </div>
           <button 
             onClick={handleLoadRoster}
             disabled={!selectedSubjectId || !selectedComponent}

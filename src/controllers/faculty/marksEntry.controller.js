@@ -19,8 +19,8 @@ const getAssignedSubjects = async (req, res) => {
       JOIN semester_subject_mapping ssm 
         ON fsm.subject_id = ssm.subject_id AND fsm.semester_id = ssm.semester_id
       JOIN subject sub ON ssm.subject_id = sub.subject_id
-      JOIN semester sem ON sub.semester_id = sem.semester_id
-      WHERE fsm.faculty_id = :faculty_id AND fsm.deletedAt IS NULL AND ssm.deleted_at IS NULL
+      JOIN semester sem ON ssm.semester_id = sem.semester_id
+      WHERE fsm.faculty_id = :faculty_id AND fsm.deletedAt IS NULL AND ssm.deletedAt IS NULL
       GROUP BY ssm.mapping_id
     `;
 
