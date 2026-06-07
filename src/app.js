@@ -46,6 +46,7 @@ const studentRevalRoutes = require('./routes/student/reval.route.js');
 const postExamRoutes = require('./routes/student/postExam.route.js');
 const coeRevalAssignmentRoutes = require('./routes/coe/revalAssignment.route.js');
 const paperSetRoutes = require('./routes/exam/paperSet.route.js');
+const ktManagementRoutes = require('./routes/coe/ktManagement.route.js');
 
 const programmeOutcomeRoutes = require('./routes/masterRoutes/programmeOutcome.routes.js');
 const courseOutcomeRoutes = require('./routes/programme/courseOutcome.routes.js');
@@ -129,6 +130,8 @@ app.use('/api/v1/coe/copy-case', copyCaseProcessRoutes);
 app.use('/api/v1/student/revaluation', studentRevalRoutes);
 app.use('/api/v1/student/post-exam', postExamRoutes);
 app.use('/api/v1/coe/reval-assignment', coeRevalAssignmentRoutes);
+app.use('/api/v1/coe/kt', ktManagementRoutes);
+
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
