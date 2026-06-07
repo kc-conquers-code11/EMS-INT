@@ -70,14 +70,15 @@ exports.runKTDetection = async (req, res) => {
 
                 for (const mark of marks) {
                     let isFail = false;
+                    const comp = mark.component ? mark.component.toUpperCase() : '';
                     
                     if (hasUFM) {
                         isFail = true; // Auto fail due to UFM
                     } else {
                         // Compare against subject minimums
-                        if (mark.component === 'THEORY' && subject.min_pass_theory && mark.marks_obtained < subject.min_pass_theory) isFail = true;
-                        if (mark.component === 'PRACTICAL' && subject.min_pass_practical && mark.marks_obtained < subject.min_pass_practical) isFail = true;
-                        if (mark.component === 'IA' && subject.min_pass_ia && mark.marks_obtained < subject.min_pass_ia) isFail = true;
+                        if (comp === 'THEORY' && subject.min_pass_theory && mark.marks_obtained < subject.min_pass_theory) isFail = true;
+                        if (comp === 'PRACTICAL' && subject.min_pass_practical && mark.marks_obtained < subject.min_pass_practical) isFail = true;
+                        if (comp === 'IA' && subject.min_pass_ia && mark.marks_obtained < subject.min_pass_ia) isFail = true;
                     }
 
                     if (isFail) {
@@ -87,7 +88,7 @@ exports.runKTDetection = async (req, res) => {
                                 student_prn,
                                 original_exam_event_id: exam_event_id,
                                 subject_mapping_id: rs.reg_subj_id,
-                                failed_component: mark.component
+                                failed_component: comp
                             }
                         });
 
@@ -96,7 +97,7 @@ exports.runKTDetection = async (req, res) => {
                                 student_prn,
                                 original_exam_event_id: exam_event_id,
                                 subject_mapping_id: rs.reg_subj_id,
-                                failed_component: mark.component,
+                                failed_component: comp,
                                 attempt_count: 1,
                                 status: 'PENDING_REG'
                             });
